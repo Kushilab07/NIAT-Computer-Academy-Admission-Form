@@ -3,154 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIAT Computer Academy-Admission Form</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <title>NIAT Admission Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     
     <style>
       /* THEME: Ink Wash */
       body { font-family: 'Lato', sans-serif; background-color: #CBCBCB; margin: 0; padding: 40px 15px; color: #4A4A4A; }
       .container { max-width: 650px; margin: 0 auto; background: #FFFFE3; padding: 40px; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-top: 6px solid #6D8196; }
-      h2 { font-family: 'Playfair Display', serif; text-align: center; color: #4A4A4A; font-size: 32px; margin-bottom: 5px; }
-      .section-header { font-family: 'Playfair Display', serif; color: #4A4A4A; font-size: 20px; border-bottom: 2px solid #CBCBCB; padding-bottom: 5px; margin-top: 35px; margin-bottom: 20px; }
+      
+      /* --- HEADER BRANDING --- */
+      .institute-header { text-align: center; border-bottom: 2px solid #6D8196; padding-bottom: 20px; margin-bottom: 30px; }
+      .inst-name { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800; color: #2c3e50; text-transform: uppercase; line-height: 1.3; margin-bottom: 5px; }
+      .inst-iso { font-family: 'Lato', sans-serif; font-size: 14px; font-weight: bold; color: #c0392b; margin-bottom: 5px; }
+      .inst-reg { font-family: 'Lato', sans-serif; font-size: 13px; color: #4A4A4A; font-weight: 600; }
+      .inst-addr { font-family: 'Lato', sans-serif; font-size: 13px; color: #666; font-style: italic; margin-top: 5px;}
+
+      /* Section Headers Font Change */
+      .section-header { 
+        font-family: 'Montserrat', sans-serif; /* Changed Font */
+        color: #4A4A4A; 
+        font-size: 18px; 
+        font-weight: 700;
+        text-transform: uppercase;
+        border-bottom: 2px solid #CBCBCB; 
+        padding-bottom: 5px; 
+        margin-top: 35px; 
+        margin-bottom: 20px; 
+      }
       
       /* Input Styles */
-      input, select { 
-        width: 100%; 
-        padding: 15px; 
-        margin-bottom: 15px; 
-        border: 1px solid #CBCBCB; 
-        background-color: #FFFFFF; 
-        border-radius: 2px; 
-        box-sizing: border-box; 
-        font-family: 'Lato', sans-serif; 
-        transition: border-color 0.3s; 
-      }
+      input, select { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFFFF; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
       input::placeholder { color: #999; } 
       input:focus, select:focus { outline: none; border-color: #6D8196; border-width: 2px; }
       
-      /* Readonly input style */
       input[readonly] { background-color: #e9ecef; color: #4A4A4A; font-weight: bold; cursor: not-allowed; border: 1px dashed #ccc; }
 
       .row { display: flex; gap: 20px; } .col { flex: 1; }
       @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
       .hidden { display: none; }
       
-      /* Button Styles */
-      .btn-primary { width: 100%; background-color: #6D8196; color: #FFFFE3; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 2px; cursor: pointer; font-family: 'Playfair Display', serif; margin-top: 10px;}
-      .btn-google { background-color: #6D8196; color: white; margin-top: 30px; } 
+      /* Buttons */
+      .btn-primary { width: 70%; background-color: #6D8196; color: #FFFFE3; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; font-family: 'Montserrat', sans-serif; margin-top: 10px;}
+      .btn-google { background-color: #DB4437; color: white; margin-top: 30px; } 
       .btn-primary:disabled { background-color: #ccc; cursor: wait; }
 
-      /* Pay Button Style */
-      .pay-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        background-color: #4A4A4A; /* Charcoal */
-        color: #FFFFE3;
-        text-decoration: none;
-        padding: 15px;
-        border-radius: 4px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        box-sizing: border-box;
-      }
-        /* --- NEW SUBMIT BUTTON STYLES --- */
-.submit-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-  height: 60px; /* Reserve space */
-}
+      /* Pay Button */
+      .pay-btn { display: block; width: 100%; text-align: center; background-color: #4A4A4A; color: #FFFFE3; text-decoration: none; padding: 15px; border-radius: 4px; font-weight: bold; margin-bottom: 20px; box-sizing: border-box; }
 
-#submit-btn {
-  position: relative;
-  width: 100%; /* Start full width */
-  max-width: 100%;
-  height: 55px;
-  background-color: #6D8196; /* Slate Blue */
-  color: #FFFFE3; /* Ivory Text */
-  border: 3px solid #6D8196; /* Match bg */
-  border-radius: 4px; /* Square corners initially */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s ease; /* Smooth transition */
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  letter-spacing: 1px;
-  font-weight: bold;
-}
-
-#submit-btn span,
-#submit-btn svg {
-  position: absolute;
-  transition: opacity 0.3s;
-}
-
-#submit-btn svg {
-  opacity: 0; /* Hidden initially */
-  fill: transparent;
-  width: 24px;
-  height: 24px;
-}
-
-/* --- STATE: LOADING (Spinning) --- */
-#submit-btn.loading {
-  width: 55px; /* Shrink to circle */
-  border-radius: 50%;
-  background-color: transparent;
-  border-color: #CBCBCB; /* Grey Border */
-  border-left-color: #4A4A4A; /* Charcoal Spinner */
-  color: transparent; /* Hide text */
-  animation: spin 1s linear infinite;
-}
-
-#submit-btn.loading span { opacity: 0; }
-
-/* --- STATE: SUCCESS (Green Check) --- */
-#submit-btn.success {
-  width: 55px;
-  border-radius: 50%;
-  background-color: #fff;
-  border-color: #28a745; /* Success Green */
-}
-
-#submit-btn.success span { opacity: 0; }
-#submit-btn.success svg {
-  opacity: 1;
-  fill: #28a745; /* Green Check */
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.noselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-      /* Profile Box */
+      /* Profile & Files */
       .user-profile { text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(109, 129, 150, 0.1); border-radius: 4px; }
       .file-label { display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #6D8196; }
+
+      /* Animated Submit Button CSS */
+      .submit-wrapper { display: flex; justify-content: center; margin-top: 40px; height: 60px; }
+      #submit-btn { position: relative; width: 150px; height: 50px; background-color: #6D8196; color: #FFFFE3; border: 4px solid #6D8196; border-radius: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.5s ease; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+      #submit-btn span, #submit-btn svg { position: absolute; transition: opacity 0.3s; }
+      #submit-btn svg { opacity: 0; fill: transparent; width: 24px; height: 24px; }
+      #submit-btn.loading { width: 55px; border-radius: 50%; background-color: transparent; border-color: #CBCBCB; border-left-color: #4A4A4A; color: transparent; animation: spin 1s linear infinite; }
+      #submit-btn.loading span { opacity: 0; }
+      #submit-btn.success { width: 55px; border-radius: 50%; background-color: #fff; border-color: #28a745; }
+      #submit-btn.success span { opacity: 0; }
+      #submit-btn.success svg { opacity: 1; fill: #28a745; }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      .noselect { user-select: none; }
+
     </style>
 </head>
 <body>
 
     <div class="container">
-      <h2>NIAT Computer Academy-Admission Form</h2>
+      
+      <div class="institute-header">
+        <div class="inst-name">NIAT Computer Academy &<br>Vocational Training Institute</div>
+        <div class="inst-iso">AN ISO 9001:2015 CERTIFIED INSTITUTE</div>
+        <div class="inst-reg">Regd. Under MSME Govt. of India (No-AS-23-0000097)</div>
+        <div class="inst-addr">Branch: Arikuchi & Bagals Road Chowk, Nalbari</div>
+      </div>
 
       <div id="login-section" style="text-align: center; padding: 40px 0;">
         <p>Please sign in with your Google Account to begin.</p>
-        <button id="google-login-btn" class="btn-primary btn-google">
-          Sign in with Google
-        </button>
+        <button id="google-login-btn" class="btn-primary btn-google">Sign in with Google</button>
       </div>
 
       <div id="form-section" class="hidden">
@@ -164,10 +96,9 @@
             <div class="section-header">1. Personal Information</div>
             <input type="text" name="studentName" placeholder="Student Name" required>
             <input type="text" name="fatherName" placeholder="Father's Name" required>
-            
             <div class="row">
                 <div class="col"><input type="email" id="email-field" name="email" placeholder="Email Address" readonly required title="This email is linked to your login"></div>
-                <div class="col"><input type="tel" name="contact" placeholder="Contact Number (10 digits)" pattern="[0-9]{10}" required></div>
+                <div class="col"><input type="tel" name="contact" placeholder="Contact Number" pattern="[0-9]{10}" required></div>
             </div>
 
             <div class="section-header">2. Address</div>
@@ -175,66 +106,71 @@
             <div class="row"><div class="col"><input type="text" name="district" placeholder="District" required></div><div class="col"><input type="number" name="pin" placeholder="PIN Code" required></div></div>
 
             <div class="section-header">3. Profile</div>
-            <input type="text" name="qualification" placeholder="Last Qualification (e.g. 12th Pass)" required>
-            <input type="text" name="activity" placeholder="Present Activity (e.g. Student)" required>
+            <input type="text" name="qualification" placeholder="Last Qualification" required>
+            <input type="text" name="activity" placeholder="Present Activity" required>
 
-            <div class="section-header">4. Select Course (Choose One)</div>
+            <div class="section-header">4. Select Course</div>
             
             <select name="course3m" class="course-select">
                 <option value="">-- Three Month Course --</option>
-                <option value="CCA">Certificate in Computer App (CCA)</option>
-                <option value="DTP">Desktop Publishing (DTP)</option>
+                <option value="Basic Of Computer">Basic Of Computer</option>
+                <option value="DTP">DTP</option>
+                <option value="Tally Prime & Accounting">Tally Prime & Accounting</option>
+                <option value="Advance Excel with MIS Report">Advance Excel with MIS Report</option>
+                <option value="AI/ML using Python">AI/ML using Python</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Communication skill & Personality Dev">Communication skill & Personality Dev</option>
+                <option value="Office management with Google workspace">Office management with Google workspace</option>
+                <option value="SDP(Skill Development Programme)">SDP(Skill Development Programme)</option>
             </select>
             
             <select name="course6m" class="course-select">
                 <option value="">-- Six Month Course --</option>
-                <option value="DCA">Diploma in Computer App (DCA)</option>
-                <option value="Tally">Tally Prime / ERP</option>
+                <option value="Diploma in Computer Application">Diploma in Computer Application</option>
+                <option value="Advance Tally Prime with GST">Advance Tally Prime with GST</option>
+                <option value="Diploma in Computer Application in Business (CAB)">Diploma in Computer Application in Business (CAB)</option>
+                <option value="Personal Financial Literacy & Stock Market">Personal Financial Literacy & Stock Market</option>
+                <option value="Back office Management & MIS Report">Back office Management & MIS Report</option>
+                <option value="Data Analyst with Al Technology">Data Analyst with Al Technology</option>
             </select>
             
             <select name="course1y" class="course-select">
                 <option value="">-- One Year Course --</option>
-                <option value="ADCA">Adv. Diploma (ADCA)</option>
-                <option value="PGDCA">PG Diploma (PGDCA)</option>
+                <option value="Advance Diploma in Computer Application">Advance Diploma in Computer Application</option>
+                <option value="Post Graduate Diploma in Computer Application">Post Graduate Diploma in Computer Application</option>
+                <option value="Advance Diploma in Financial Accounting with Taxation">Advance Diploma in Financial Accounting with Taxation</option>
             </select>
             
             <select name="courseSp" class="course-select">
                 <option value="">-- Special Course --</option>
-                <option value="WebDesign">Web Design (HTML/CSS/JS)</option>
-                <option value="Python">Python Programming</option>
+                <option value="Advance Diploma in Computer Application with Al Technology">Advance Diploma in Computer Application with Al Technology</option>
+                <option value="Diploma in Computer Teacher Training">Diploma in Computer Teacher Training</option>
+                <option value="Master Diploma in Computer Application">Master Diploma in Computer Application</option>
             </select>
 
             <div class="section-header">5. Documents</div>
-            
-            <span class="file-label">Passport Sized Photo</span>
-            <input type="file" id="photoFile" accept="image/*" required>
-            
-            <span class="file-label">Last Qualification Document</span>
-            <input type="file" id="docFile" accept="image/*,.pdf" required>
+            <span class="file-label">Passport Sized Photo</span><input type="file" id="photoFile" accept="image/*" required>
+            <span class="file-label">Last Qualification Document</span><input type="file" id="docFile" accept="image/*,.pdf" required>
 
-            <div class="section-header">6. Payment (₹1000)</div>
+            <div class="section-header">6. Payment</div>
+            <p style="text-align:center; color:#4A4A4A; margin-bottom:15px; font-weight:bold;">Please pay admission fee 1000 Rs.</p>
             
-            <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1&cu=INR&tn=Admission%20Fee" class="pay-btn">
-                Click to Pay via UPI App
-            </a>
+            <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1&cu=INR&tn=Admission%20Fee" class="pay-btn">Click to Pay via UPI App</a>
 
-            <span class="file-label">Upload Payment Screenshot</span>
-            <input type="file" id="payFile" accept="image/*" required>
+            <span class="file-label">Upload Payment Screenshot</span><input type="file" id="payFile" accept="image/*" required>
 
             <div class="submit-wrapper">
-  <button type="submit" id="submit-btn" class="noselect">
-    <span>SUBMIT APPLICATION</span>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/>
-    </svg>
-  </button>
-</div>
+              <button type="submit" id="submit-btn" class="noselect">
+                <span>SUBMIT</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/></svg>
+              </button>
+            </div>
         </form>
       </div>
 
       <div id="success-view" class="hidden" style="text-align:center;">
         <h2 style="color:#6D8196;">Success!</h2>
-        <p>Your Serial Number:</p>
+        <p>Your Registration Number:</p>
         <div id="serial-display" style="background:#4A4A4A; color:#FFFFE3; padding:15px; font-size:32px; display:inline-block; margin:20px;"></div>
         <p>A confirmation email has been sent.</p>
       </div>
@@ -245,7 +181,6 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-      // --- YOUR FIREBASE CONFIG ---
       const firebaseConfig = {
         apiKey: "AIzaSyCWpp7vH0FAubDAW1Gvw5LMmtEqfMIq4u0",
         authDomain: "niat-admission-form.firebaseapp.com",
@@ -256,40 +191,43 @@
         measurementId: "G-YPCVGYS7L9"
       };
 
-      // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
-
-      // Login Button Logic
       const loginBtn = document.getElementById('google-login-btn');
+
       loginBtn.addEventListener('click', () => {
-        signInWithPopup(auth, provider)
-          .then((result) => {
-             // Logic handled by onAuthStateChanged
-          }).catch((error) => {
-            alert("Login Failed: " + error.message);
-          });
+        signInWithPopup(auth, provider).catch((error) => { alert("Login Failed: " + error.message); });
       });
 
-      // Monitor Auth State
       onAuthStateChanged(auth, (user) => {
         if (user) {
           document.getElementById('login-section').classList.add('hidden');
           document.getElementById('form-section').classList.remove('hidden');
-          
-          const emailInput = document.getElementById('email-field');
-          emailInput.value = user.email; // Auto-fill email
+          document.getElementById('email-field').value = user.email;
           document.getElementById('user-display-name').innerText = "Welcome, " + user.displayName;
         }
       });
     </script>
 
     <script>
-      // --- YOUR GOOGLE SCRIPT URL ---
       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQ-eYOp4XMLhT0CXwnG4WDnjbJh7RUtMnM-83tCLsFnFTOcWMGKiwH1-Xc4XthSbxd/exec"; 
+      const MAX_SIZE = 2 * 1024 * 1024; // 2MB Limit
 
-      // 1. Course Selection Logic (Only allow 1 course)
+      // 1. File Size Checker
+      function checkFileSize(fileInput) {
+        if(fileInput.files.length > 0) {
+            if(fileInput.files[0].size > MAX_SIZE) {
+                alert("File is too big! Max size is 2MB.");
+                fileInput.value = ""; 
+            }
+        }
+      }
+      document.getElementById('photoFile').addEventListener('change', function() { checkFileSize(this) });
+      document.getElementById('docFile').addEventListener('change', function() { checkFileSize(this) });
+      document.getElementById('payFile').addEventListener('change', function() { checkFileSize(this) });
+
+      // 2. Course Selection
       const selects = document.querySelectorAll('.course-select');
       selects.forEach(select => {
         select.addEventListener('change', function() {
@@ -297,70 +235,60 @@
         });
       });
 
-      // 2. Form Submission Logic
-document.getElementById('admissionForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  var btn = document.getElementById('submit-btn');
-  
-  // A. Start Animation (Add Loading Class)
-  btn.disabled = true; 
-  btn.classList.add('loading'); // Triggers the shrink and spin
+      // 3. Submit Logic
+      document.getElementById('admissionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('submit-btn');
+        btn.disabled = true; 
+        btn.classList.add('loading');
 
-  Promise.all([getFileData('photoFile'), getFileData('docFile'), getFileData('payFile')])
-  .then(files => {
-      var formData = {
-          studentName: document.getElementsByName('studentName')[0].value,
-          fatherName: document.getElementsByName('fatherName')[0].value,
-          email: document.getElementById('email-field').value, 
-          contact: document.getElementsByName('contact')[0].value,
-          village: document.getElementsByName('village')[0].value,
-          po: document.getElementsByName('po')[0].value,
-          district: document.getElementsByName('district')[0].value,
-          pin: document.getElementsByName('pin')[0].value,
-          qualification: document.getElementsByName('qualification')[0].value,
-          activity: document.getElementsByName('activity')[0].value,
-          course3m: document.getElementsByName('course3m')[0].value,
-          course6m: document.getElementsByName('course6m')[0].value,
-          course1y: document.getElementsByName('course1y')[0].value,
-          courseSp: document.getElementsByName('courseSp')[0].value,
-          photoData: files[0].data, photoName: files[0].name,
-          docData: files[1].data, docName: files[1].name,
-          payData: files[2].data, payName: files[2].name
-      };
+        Promise.all([getFileData('photoFile'), getFileData('docFile'), getFileData('payFile')])
+        .then(files => {
+            var formData = {
+                studentName: document.getElementsByName('studentName')[0].value,
+                fatherName: document.getElementsByName('fatherName')[0].value,
+                email: document.getElementById('email-field').value, 
+                contact: document.getElementsByName('contact')[0].value,
+                village: document.getElementsByName('village')[0].value,
+                po: document.getElementsByName('po')[0].value,
+                district: document.getElementsByName('district')[0].value,
+                pin: document.getElementsByName('pin')[0].value,
+                qualification: document.getElementsByName('qualification')[0].value,
+                activity: document.getElementsByName('activity')[0].value,
+                course3m: document.getElementsByName('course3m')[0].value,
+                course6m: document.getElementsByName('course6m')[0].value,
+                course1y: document.getElementsByName('course1y')[0].value,
+                courseSp: document.getElementsByName('courseSp')[0].value,
+                photoData: files[0].data, photoName: files[0].name,
+                docData: files[1].data, docName: files[1].name,
+                payData: files[2].data, payName: files[2].name
+            };
 
-      fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(formData)
-      })
-      .then(response => response.json())
-      .then(data => {
-          if(data.status === 'success') {
-              // B. Success Animation
-              btn.classList.remove('loading');
-              btn.classList.add('success'); // Shows the green check
-              
-              // Wait 1.5 seconds so user sees the checkmark, then show receipt
-              setTimeout(() => {
-                document.getElementById('form-section').classList.add('hidden');
-                document.getElementById('success-view').classList.remove('hidden');
-                document.getElementById('serial-display').textContent = data.serial;
-              }, 1500);
-
-          } else {
-              alert("Error: " + data.message);
-              // Reset Button on Error
-              btn.disabled = false; 
-              btn.classList.remove('loading');
-          }
-      })
-      .catch(error => {
-          alert("Network Error: " + error);
-          btn.disabled = false; 
-          btn.classList.remove('loading');
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    btn.classList.remove('loading');
+                    btn.classList.add('success');
+                    setTimeout(() => {
+                      document.getElementById('form-section').classList.add('hidden');
+                      document.getElementById('success-view').classList.remove('hidden');
+                      document.getElementById('serial-display').textContent = data.serial;
+                    }, 1500);
+                } else {
+                    alert("Error: " + data.message);
+                    btn.disabled = false; btn.classList.remove('loading');
+                }
+            })
+            .catch(error => {
+                alert("Network Error: " + error);
+                btn.disabled = false; btn.classList.remove('loading');
+            });
+        });
       });
-  });
-});
 
       function getFileData(id) {
         return new Promise(resolve => {
@@ -373,5 +301,4 @@ document.getElementById('admissionForm').addEventListener('submit', function(e) 
       }
     </script>
 </body>
-  </html>
-
+</html>

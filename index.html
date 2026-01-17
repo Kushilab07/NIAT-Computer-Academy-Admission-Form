@@ -54,6 +54,87 @@
         margin-bottom: 20px;
         box-sizing: border-box;
       }
+        /* --- NEW SUBMIT BUTTON STYLES --- */
+.submit-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  height: 60px; /* Reserve space */
+}
+
+#submit-btn {
+  position: relative;
+  width: 100%; /* Start full width */
+  max-width: 100%;
+  height: 55px;
+  background-color: #6D8196; /* Slate Blue */
+  color: #FFFFE3; /* Ivory Text */
+  border: 3px solid #6D8196; /* Match bg */
+  border-radius: 4px; /* Square corners initially */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease; /* Smooth transition */
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+#submit-btn span,
+#submit-btn svg {
+  position: absolute;
+  transition: opacity 0.3s;
+}
+
+#submit-btn svg {
+  opacity: 0; /* Hidden initially */
+  fill: transparent;
+  width: 24px;
+  height: 24px;
+}
+
+/* --- STATE: LOADING (Spinning) --- */
+#submit-btn.loading {
+  width: 55px; /* Shrink to circle */
+  border-radius: 50%;
+  background-color: transparent;
+  border-color: #CBCBCB; /* Grey Border */
+  border-left-color: #4A4A4A; /* Charcoal Spinner */
+  color: transparent; /* Hide text */
+  animation: spin 1s linear infinite;
+}
+
+#submit-btn.loading span { opacity: 0; }
+
+/* --- STATE: SUCCESS (Green Check) --- */
+#submit-btn.success {
+  width: 55px;
+  border-radius: 50%;
+  background-color: #fff;
+  border-color: #28a745; /* Success Green */
+}
+
+#submit-btn.success span { opacity: 0; }
+#submit-btn.success svg {
+  opacity: 1;
+  fill: #28a745; /* Green Check */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
       /* Profile Box */
       .user-profile { text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(109, 129, 150, 0.1); border-radius: 4px; }
@@ -140,8 +221,14 @@
             <span class="file-label">Upload Payment Screenshot</span>
             <input type="file" id="payFile" accept="image/*" required>
 
-            <button type="submit" id="submit-btn" class="btn-primary">Submit</button>
-            <div id="loading-msg" class="hidden" style="text-align:center; margin-top:10px;">Processing... Please wait...</div>
+            <div class="submit-wrapper">
+  <button type="submit" id="submit-btn" class="noselect">
+    <span>SUBMIT APPLICATION</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/>
+    </svg>
+  </button>
+</div>
         </form>
       </div>
 
@@ -210,57 +297,70 @@
         });
       });
 
-      // 2. Form Submission
-      document.getElementById('admissionForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var btn = document.getElementById('submit-btn');
-        var loadMsg = document.getElementById('loading-msg');
-        btn.disabled = true; btn.innerText = "Sending...";
-        loadMsg.classList.remove('hidden');
+      // 2. Form Submission Logic
+document.getElementById('admissionForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  var btn = document.getElementById('submit-btn');
+  
+  // A. Start Animation (Add Loading Class)
+  btn.disabled = true; 
+  btn.classList.add('loading'); // Triggers the shrink and spin
 
-        Promise.all([getFileData('photoFile'), getFileData('docFile'), getFileData('payFile')])
-        .then(files => {
-            var formData = {
-                studentName: document.getElementsByName('studentName')[0].value,
-                fatherName: document.getElementsByName('fatherName')[0].value,
-                email: document.getElementById('email-field').value, 
-                contact: document.getElementsByName('contact')[0].value,
-                village: document.getElementsByName('village')[0].value,
-                po: document.getElementsByName('po')[0].value,
-                district: document.getElementsByName('district')[0].value,
-                pin: document.getElementsByName('pin')[0].value,
-                qualification: document.getElementsByName('qualification')[0].value,
-                activity: document.getElementsByName('activity')[0].value,
-                course3m: document.getElementsByName('course3m')[0].value,
-                course6m: document.getElementsByName('course6m')[0].value,
-                course1y: document.getElementsByName('course1y')[0].value,
-                courseSp: document.getElementsByName('courseSp')[0].value,
-                photoData: files[0].data, photoName: files[0].name,
-                docData: files[1].data, docName: files[1].name,
-                payData: files[2].data, payName: files[2].name
-            };
+  Promise.all([getFileData('photoFile'), getFileData('docFile'), getFileData('payFile')])
+  .then(files => {
+      var formData = {
+          studentName: document.getElementsByName('studentName')[0].value,
+          fatherName: document.getElementsByName('fatherName')[0].value,
+          email: document.getElementById('email-field').value, 
+          contact: document.getElementsByName('contact')[0].value,
+          village: document.getElementsByName('village')[0].value,
+          po: document.getElementsByName('po')[0].value,
+          district: document.getElementsByName('district')[0].value,
+          pin: document.getElementsByName('pin')[0].value,
+          qualification: document.getElementsByName('qualification')[0].value,
+          activity: document.getElementsByName('activity')[0].value,
+          course3m: document.getElementsByName('course3m')[0].value,
+          course6m: document.getElementsByName('course6m')[0].value,
+          course1y: document.getElementsByName('course1y')[0].value,
+          courseSp: document.getElementsByName('courseSp')[0].value,
+          photoData: files[0].data, photoName: files[0].name,
+          docData: files[1].data, docName: files[1].name,
+          payData: files[2].data, payName: files[2].name
+      };
 
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.status === 'success') {
-                    document.getElementById('form-section').classList.add('hidden');
-                    document.getElementById('success-view').classList.remove('hidden');
-                    document.getElementById('serial-display').textContent = data.serial;
-                } else {
-                    alert("Error: " + data.message);
-                    btn.disabled = false; btn.innerText = "Submit Application";
-                }
-            })
-            .catch(error => {
-                alert("Network Error: " + error);
-                btn.disabled = false; btn.innerText = "Submit Application";
-            });
-        });
+      fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+          if(data.status === 'success') {
+              // B. Success Animation
+              btn.classList.remove('loading');
+              btn.classList.add('success'); // Shows the green check
+              
+              // Wait 1.5 seconds so user sees the checkmark, then show receipt
+              setTimeout(() => {
+                document.getElementById('form-section').classList.add('hidden');
+                document.getElementById('success-view').classList.remove('hidden');
+                document.getElementById('serial-display').textContent = data.serial;
+              }, 1500);
+
+          } else {
+              alert("Error: " + data.message);
+              // Reset Button on Error
+              btn.disabled = false; 
+              btn.classList.remove('loading');
+          }
+      })
+      .catch(error => {
+          alert("Network Error: " + error);
+          btn.disabled = false; 
+          btn.classList.remove('loading');
       });
+  });
+});
 
       function getFileData(id) {
         return new Promise(resolve => {

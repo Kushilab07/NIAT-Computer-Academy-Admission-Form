@@ -281,12 +281,12 @@
 
     <script>
       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPAb-yZwLJZb_Bf-99zDJ9vVMPl2X3aANHMT9JASIllnNBkMcl9pxWnZaN2Fy_IEzf/exec"; 
-      const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
+      const MAX_SIZE = 2 * 1024 * 1024; // 2MB Limit
 
       function checkFileSize(fileInput) {
         if(fileInput.files.length > 0) {
             if(fileInput.files[0].size > MAX_SIZE) {
-                alert("File is too big! Max size is 1MB.");
+                alert("File is too big! Max size is 2MB.");
                 fileInput.value = ""; 
             }
         }
@@ -307,7 +307,7 @@
         });
       });
 
-      // --- SUBMIT LOGIC WITH ANIMATION DELAY ---
+      // --- SUBMIT LOGIC WITH COMPLETE ANIMATION ---
       const form = document.getElementById('admissionForm');
       if (form) {
           form.addEventListener('submit', function(e) {
@@ -316,10 +316,9 @@
             var btn = document.getElementById('submit-btn');
             if(btn) {
                 btn.disabled = true; 
-                btn.classList.add('loading'); // Start shrinking/spinning
+                btn.classList.add('loading'); // 1. Start Spinning
             }
 
-            // 1. Prepare Data
             const filePromises = [
                 getFileData('photoFile'), 
                 getFileData('docFile'), 
@@ -347,39 +346,42 @@
                     payData: files[2].data, payName: files[2].name
                 };
 
-                // 2. SET THE DESTINATION (Success Page)
-                // We set the spinner immediately on the target page, but don't show it yet
                 const serialDisplay = document.getElementById('serial-display');
                 if(serialDisplay) serialDisplay.innerHTML = '<div class="serial-loader"></div>';
 
-                // 3. START TWO PARALLEL TASKS
-                // Task A: The Upload (Background)
+                // --- START UPLOAD ---
                 const uploadTask = fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(formData)
                 }).then(response => response.json());
 
-                // Task B: The Animation Timer (Minimum 2 seconds)
+                // --- START ANIMATION TIMER (2 Seconds Spin) ---
                 const timerTask = new Promise(resolve => setTimeout(resolve, 2000));
 
-                // 4. WAIT FOR TIMER TO FINISH (So user sees the button spin)
                 timerTask.then(() => {
-                    // Time is up! Switch to the next page now.
-                    document.getElementById('form-section').classList.add('hidden');
-                    document.getElementById('success-view').classList.remove('hidden');
-                    
-                    // 5. NOW CHECK ON THE UPLOAD
-                    uploadTask.then(data => {
-                        if(data.status === 'success') {
-                            // If upload finished early, this shows immediately.
-                            // If upload is still going, this updates when it finishes.
-                            if(serialDisplay) serialDisplay.textContent = data.serial;
-                        } else {
-                            handleError("Submission Failed: " + data.message);
-                        }
-                    }).catch(error => {
-                        handleError("Network Error: " + error);
-                    });
+                    // 2. STOP SPINNING, SHOW GREEN CHECK
+                    if(btn) {
+                        btn.classList.remove('loading');
+                        btn.classList.add('success'); 
+                    }
+
+                    // 3. WAIT 1 SECOND (To let user see the Green Check)
+                    setTimeout(() => {
+                        // 4. NOW SWITCH PAGE
+                        document.getElementById('form-section').classList.add('hidden');
+                        document.getElementById('success-view').classList.remove('hidden');
+                        
+                        // 5. HANDLE SERVER RESPONSE
+                        uploadTask.then(data => {
+                            if(data.status === 'success') {
+                                if(serialDisplay) serialDisplay.textContent = data.serial;
+                            } else {
+                                handleError("Submission Failed: " + data.message);
+                            }
+                        }).catch(error => {
+                            handleError("Network Error: " + error);
+                        });
+                    }, 1000); // 1 Second delay for Green Check
                 });
             });
           });
@@ -387,13 +389,13 @@
 
       function handleError(msg) {
         alert(msg);
-        // Go back to form if error
         document.getElementById('success-view').classList.add('hidden');
         document.getElementById('form-section').classList.remove('hidden');
         var btn = document.getElementById('submit-btn');
         if(btn) {
             btn.disabled = false; 
             btn.classList.remove('loading');
+            btn.classList.remove('success'); // Reset checkmark too
         }
       }
 

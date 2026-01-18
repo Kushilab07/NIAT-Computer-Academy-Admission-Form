@@ -281,19 +281,24 @@
 
     <script>
       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPAb-yZwLJZb_Bf-99zDJ9vVMPl2X3aANHMT9JASIllnNBkMcl9pxWnZaN2Fy_IEzf/exec"; 
-      const MAX_SIZE = 2 * 1024 * 1024; // 2MB Limit
+      const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
 
       function checkFileSize(fileInput) {
         if(fileInput.files.length > 0) {
             if(fileInput.files[0].size > MAX_SIZE) {
-                alert("File is too big! Max size is 2MB.");
+                alert("File is too big! Max size is 1MB.");
                 fileInput.value = ""; 
             }
         }
       }
-      document.getElementById('photoFile').addEventListener('change', function() { checkFileSize(this) });
-      document.getElementById('docFile').addEventListener('change', function() { checkFileSize(this) });
-      document.getElementById('payFile').addEventListener('change', function() { checkFileSize(this) });
+      
+      const photoF = document.getElementById('photoFile');
+      const docF = document.getElementById('docFile');
+      const payF = document.getElementById('payFile');
+
+      if(photoF) photoF.addEventListener('change', function() { checkFileSize(this) });
+      if(docF) docF.addEventListener('change', function() { checkFileSize(this) });
+      if(payF) payF.addEventListener('change', function() { checkFileSize(this) });
 
       const selects = document.querySelectorAll('.course-select');
       selects.forEach(select => {
@@ -302,75 +307,106 @@
         });
       });
 
-      // --- INSTANT UI SWITCH LOGIC ---
-      document.getElementById('admissionForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var btn = document.getElementById('submit-btn');
-        btn.disabled = true; 
-        btn.classList.add('loading');
+      // --- SUBMIT LOGIC WITH ANIMATION DELAY ---
+      const form = document.getElementById('admissionForm');
+      if (form) {
+          form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            var btn = document.getElementById('submit-btn');
+            if(btn) {
+                btn.disabled = true; 
+                btn.classList.add('loading'); // Start shrinking/spinning
+            }
 
-        Promise.all([getFileData('photoFile'), getFileData('docFile'), getFileData('payFile')])
-        .then(files => {
-            var formData = {
-                studentName: document.getElementsByName('studentName')[0].value,
-                fatherName: document.getElementsByName('fatherName')[0].value,
-                email: document.getElementById('email-field').value, 
-                contact: document.getElementsByName('contact')[0].value,
-                village: document.getElementsByName('village')[0].value,
-                po: document.getElementsByName('po')[0].value,
-                district: document.getElementsByName('district')[0].value,
-                pin: document.getElementsByName('pin')[0].value,
-                qualification: document.getElementsByName('qualification')[0].value,
-                activity: document.getElementsByName('activity')[0].value,
-                course3m: document.getElementsByName('course3m')[0].value,
-                course6m: document.getElementsByName('course6m')[0].value,
-                course1y: document.getElementsByName('course1y')[0].value,
-                courseSp: document.getElementsByName('courseSp')[0].value,
-                photoData: files[0].data, photoName: files[0].name,
-                docData: files[1].data, docName: files[1].name,
-                payData: files[2].data, payName: files[2].name
-            };
+            // 1. Prepare Data
+            const filePromises = [
+                getFileData('photoFile'), 
+                getFileData('docFile'), 
+                getFileData('payFile')
+            ];
 
-            // 1. INSTANTLY HIDE FORM & SHOW SUCCESS WITH SPINNER
-            document.getElementById('form-section').classList.add('hidden');
-            document.getElementById('success-view').classList.remove('hidden');
-            document.getElementById('serial-display').innerHTML = '<div class="serial-loader"></div>';
+            Promise.all(filePromises).then(files => {
+                var formData = {
+                    studentName: document.getElementsByName('studentName')[0].value,
+                    fatherName: document.getElementsByName('fatherName')[0].value,
+                    email: document.getElementById('email-field').value, 
+                    contact: document.getElementsByName('contact')[0].value,
+                    village: document.getElementsByName('village')[0].value,
+                    po: document.getElementsByName('po')[0].value,
+                    district: document.getElementsByName('district')[0].value,
+                    pin: document.getElementsByName('pin')[0].value,
+                    qualification: document.getElementsByName('qualification')[0].value,
+                    activity: document.getElementsByName('activity')[0].value,
+                    course3m: document.getElementsByName('course3m')[0].value,
+                    course6m: document.getElementsByName('course6m')[0].value,
+                    course1y: document.getElementsByName('course1y')[0].value,
+                    courseSp: document.getElementsByName('courseSp')[0].value,
+                    photoData: files[0].data, photoName: files[0].name,
+                    docData: files[1].data, docName: files[1].name,
+                    payData: files[2].data, payName: files[2].name
+                };
 
-            // 2. START UPLOAD IN BACKGROUND
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.status === 'success') {
-                    // 3. REPLACE SPINNER WITH ACTUAL NUMBER
-                    document.getElementById('serial-display').textContent = data.serial;
-                } else {
-                    // ERROR: Bring them back to form
-                    alert("Submission Failed: " + data.message);
-                    document.getElementById('success-view').classList.add('hidden');
-                    document.getElementById('form-section').classList.remove('hidden');
-                    btn.disabled = false; btn.classList.remove('loading');
-                }
-            })
-            .catch(error => {
-                // ERROR: Bring them back to form
-                alert("Network Error: " + error);
-                document.getElementById('success-view').classList.add('hidden');
-                document.getElementById('form-section').classList.remove('hidden');
-                btn.disabled = false; btn.classList.remove('loading');
+                // 2. SET THE DESTINATION (Success Page)
+                // We set the spinner immediately on the target page, but don't show it yet
+                const serialDisplay = document.getElementById('serial-display');
+                if(serialDisplay) serialDisplay.innerHTML = '<div class="serial-loader"></div>';
+
+                // 3. START TWO PARALLEL TASKS
+                // Task A: The Upload (Background)
+                const uploadTask = fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                }).then(response => response.json());
+
+                // Task B: The Animation Timer (Minimum 2 seconds)
+                const timerTask = new Promise(resolve => setTimeout(resolve, 2000));
+
+                // 4. WAIT FOR TIMER TO FINISH (So user sees the button spin)
+                timerTask.then(() => {
+                    // Time is up! Switch to the next page now.
+                    document.getElementById('form-section').classList.add('hidden');
+                    document.getElementById('success-view').classList.remove('hidden');
+                    
+                    // 5. NOW CHECK ON THE UPLOAD
+                    uploadTask.then(data => {
+                        if(data.status === 'success') {
+                            // If upload finished early, this shows immediately.
+                            // If upload is still going, this updates when it finishes.
+                            if(serialDisplay) serialDisplay.textContent = data.serial;
+                        } else {
+                            handleError("Submission Failed: " + data.message);
+                        }
+                    }).catch(error => {
+                        handleError("Network Error: " + error);
+                    });
+                });
             });
-        });
-      });
+          });
+      }
+
+      function handleError(msg) {
+        alert(msg);
+        // Go back to form if error
+        document.getElementById('success-view').classList.add('hidden');
+        document.getElementById('form-section').classList.remove('hidden');
+        var btn = document.getElementById('submit-btn');
+        if(btn) {
+            btn.disabled = false; 
+            btn.classList.remove('loading');
+        }
+      }
 
       function getFileData(id) {
         return new Promise(resolve => {
-            var file = document.getElementById(id).files[0];
-            if(!file) resolve({data:null, name:null});
-            var reader = new FileReader();
-            reader.onload = e => resolve({data:e.target.result, name:file.name});
-            reader.readAsDataURL(file);
+            var el = document.getElementById(id);
+            if(!el || !el.files[0]) resolve({data:null, name:null});
+            else {
+                var file = el.files[0];
+                var reader = new FileReader();
+                reader.onload = e => resolve({data:e.target.result, name:file.name});
+                reader.readAsDataURL(file);
+            }
         });
       }
     </script>

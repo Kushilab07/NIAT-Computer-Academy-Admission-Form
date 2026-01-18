@@ -366,3 +366,13 @@
 
       function getFileData(id) {
         return new Promise(resolve => {
+            var file = document.getElementById(id).files[0];
+            if(!file) resolve({data:null, name:null});
+            var reader = new FileReader();
+            reader.onload = e => resolve({data:e.target.result, name:file.name});
+            reader.readAsDataURL(file);
+        });
+      }
+    </script>
+</body>
+</html>

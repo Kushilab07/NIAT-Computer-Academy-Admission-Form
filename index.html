@@ -18,9 +18,9 @@
       .inst-reg { font-family: 'Lato', sans-serif; font-size: 13px; color: #4A4A4A; font-weight: 600; }
       .inst-addr { font-family: 'Lato', sans-serif; font-size: 13px; color: #666; margin-top: 5px;}
 
-      /* Section Headers Font Change */
+      /* Section Headers */
       .section-header { 
-        font-family: 'Montserrat', sans-serif; /* Changed Font */
+        font-family: 'Montserrat', sans-serif; 
         color: #4A4A4A; 
         font-size: 18px; 
         font-weight: 700;
@@ -35,7 +35,6 @@
       input, select { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFFFF; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
       input::placeholder { color: #999; } 
       input:focus, select:focus { outline: none; border-color: #6D8196; border-width: 2px; }
-      
       input[readonly] { background-color: #e9ecef; color: #4A4A4A; font-weight: bold; cursor: not-allowed; border: 1px dashed #ccc; }
 
       .row { display: flex; gap: 20px; } .col { flex: 1; }
@@ -50,79 +49,60 @@
       /* Pay Button */
       .pay-btn { display: block; width: 100%; text-align: center; background-color: #4A4A4A; color: #FFFFE3; text-decoration: none; padding: 15px; border-radius: 4px; font-weight: bold; margin-bottom: 20px; box-sizing: border-box; }
 
-      /* Profile & Files */
-      .user-profile { text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(109, 129, 150, 0.1); border-radius: 4px; }
-      .file-label { display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #6D8196; }
-
-      /* --- CORRECTED ANIMATED SUBMIT BUTTON CSS --- */
-      .submit-wrapper { display: flex; justify-content: center; margin-top: 40px; height: 60px; }
-      
-      #submit-btn { 
-        position: relative; 
-        width: 150px; 
-        height: 50px; 
-        
-        /* 1. Transparent Background for Outline Style */
-        background: none; 
-        
-        /* 2. Theme Border Color (Slate Blue) */
-        border: 4px solid #6D8196; 
-        
-        /* 3. Text Color matches Border */
-        color: #6D8196; 
-        
-        border-radius: 50px; 
-        cursor: pointer; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        transition: width 0.3s ease, border-color 0.3s ease; 
-        font-family: 'Montserrat', sans-serif; 
-        font-size: 18px; 
-        font-weight: bold; 
-        letter-spacing: 1px; 
+      /* Profile Box & Logout */
+      .user-profile { 
+        text-align: center; 
+        margin-bottom: 20px; 
+        padding: 15px; 
+        background: rgba(109, 129, 150, 0.1); 
+        border-radius: 4px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
+      .user-info { text-align: left; }
+      .logout-btn {
+        background: none;
+        border: 1px solid #6D8196;
+        color: #6D8196;
+        padding: 5px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .logout-btn:hover { background: #6D8196; color: #fff; }
 
-      /* Text and Icon Transitions */
+      /* Submit Button Animation */
+      .submit-wrapper { display: flex; justify-content: center; margin-top: 40px; height: 60px; }
+      #submit-btn { 
+        position: relative; width: 150px; height: 50px; background: none; border: 4px solid #6D8196; color: #6D8196; border-radius: 50px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: width 0.3s ease, border-color 0.3s ease; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: bold; letter-spacing: 1px; 
+      }
       #submit-btn span, #submit-btn svg { position: absolute; transition: opacity 0.3s; }
       #submit-btn svg { opacity: 0; fill: transparent; width: 24px; height: 24px; }
-
-      /* --- LOADING STATE --- */
       #submit-btn.loading { 
-        width: 50px; /* Shrink to circle */
-        
-        /* 4. Create the "Spinner" look using borders */
-        border: 4px solid transparent; 
-        border-left: 4px solid #6D8196; 
-        border-bottom: 4px solid #6D8196; 
-        
-        color: transparent; 
-        animation: spin 1s linear infinite; 
+        width: 50px; border: 4px solid transparent; border-left: 4px solid #6D8196; border-bottom: 4px solid #6D8196; color: transparent; animation: spin 1s linear infinite; 
       }
-      
       #submit-btn.loading span { opacity: 0; }
-
-      /* --- SUCCESS STATE --- */
-      #submit-btn.success { 
-        width: 50px; 
-        border-color: #28a745; /* Green Border */
-        background-color: #fff; /* White Background */
-      }
-      
+      #submit-btn.success { width: 50px; border-color: #28a745; background-color: #fff; }
       #submit-btn.success span { opacity: 0; }
+      #submit-btn.success svg { opacity: 1; fill: #28a745; transition: fill 0.3s ease; }
       
-      #submit-btn.success svg { 
-        opacity: 1; 
-        fill: #28a745; /* Green Check */
-        transition: fill 0.3s ease;
-      }
-
-      @keyframes spin { 
-        0% { transform: rotate(0deg); } 
-        100% { transform: rotate(360deg); } 
+      /* --- NEW SERIAL NUMBER SPINNER --- */
+      .serial-loader {
+        border: 4px solid rgba(255, 255, 227, 0.3); /* Light Ivory transparent */
+        border-top: 4px solid #FFFFE3; /* Ivory */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
       }
       
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
       .noselect { user-select: none; }
+      .file-label { display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #6D8196; }
+
     </style>
 </head>
 <body>
@@ -144,8 +124,11 @@
       <div id="form-section" class="hidden">
         
         <div class="user-profile">
-            <span id="user-display-name" style="font-weight:bold;"></span>
-            <br><small style="color:#6D8196;">(Logged In)</small>
+            <div class="user-info">
+              <span id="user-display-name" style="font-weight:bold;">User</span>
+              <br><small style="color:#6D8196;">(Logged In)</small>
+            </div>
+            <button id="logout-btn-top" class="logout-btn">Sign Out</button>
         </div>
 
         <form id="admissionForm">
@@ -227,15 +210,20 @@
       <div id="success-view" class="hidden" style="text-align:center;">
         <h2 style="color:#6D8196;">Thank you for enrolling.</h2>
         <p>Your Registration Number:</p>
-        <div id="serial-display" style="background:#4A4A4A; color:#FFFFE3; padding:15px; font-size:32px; display:inline-block; margin:20px;"></div>
+        
+        <div id="serial-display" style="background:#4A4A4A; color:#FFFFE3; padding:15px; font-size:32px; display:inline-block; margin:20px; min-width: 100px;">
+          </div>
+        
         <p>A confirmation email has been sent.</p>
+        
+        <button id="logout-btn-bottom" class="btn-primary" style="background:#4A4A4A; margin-top:30px;">Sign Out & Close</button>
       </div>
 
     </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCWpp7vH0FAubDAW1Gvw5LMmtEqfMIq4u0",
@@ -250,18 +238,43 @@
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
+      
       const loginBtn = document.getElementById('google-login-btn');
+      const logoutBtnTop = document.getElementById('logout-btn-top');
+      const logoutBtnBottom = document.getElementById('logout-btn-bottom');
 
       loginBtn.addEventListener('click', () => {
         signInWithPopup(auth, provider).catch((error) => { alert("Login Failed: " + error.message); });
       });
 
+      const handleLogout = () => {
+        signOut(auth).then(() => {
+          document.getElementById('form-section').classList.add('hidden');
+          document.getElementById('success-view').classList.add('hidden');
+          document.getElementById('login-section').classList.remove('hidden');
+          document.getElementById('admissionForm').reset();
+          const btn = document.getElementById('submit-btn');
+          btn.classList.remove('loading', 'success');
+          btn.disabled = false;
+        }).catch((error) => {
+          alert("Error signing out: " + error.message);
+        });
+      };
+
+      logoutBtnTop.addEventListener('click', handleLogout);
+      logoutBtnBottom.addEventListener('click', handleLogout);
+
       onAuthStateChanged(auth, (user) => {
         if (user) {
           document.getElementById('login-section').classList.add('hidden');
-          document.getElementById('form-section').classList.remove('hidden');
+          if(document.getElementById('success-view').classList.contains('hidden')){
+             document.getElementById('form-section').classList.remove('hidden');
+          }
           document.getElementById('email-field').value = user.email;
-          document.getElementById('user-display-name').innerText = "Welcome, " + user.displayName;
+          document.getElementById('user-display-name').innerText = user.displayName;
+        } else {
+          document.getElementById('login-section').classList.remove('hidden');
+          document.getElementById('form-section').classList.add('hidden');
         }
       });
     </script>
@@ -270,7 +283,6 @@
       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPAb-yZwLJZb_Bf-99zDJ9vVMPl2X3aANHMT9JASIllnNBkMcl9pxWnZaN2Fy_IEzf/exec"; 
       const MAX_SIZE = 2 * 1024 * 1024; // 2MB Limit
 
-      // 1. File Size Checker
       function checkFileSize(fileInput) {
         if(fileInput.files.length > 0) {
             if(fileInput.files[0].size > MAX_SIZE) {
@@ -283,7 +295,6 @@
       document.getElementById('docFile').addEventListener('change', function() { checkFileSize(this) });
       document.getElementById('payFile').addEventListener('change', function() { checkFileSize(this) });
 
-      // 2. Course Selection
       const selects = document.querySelectorAll('.course-select');
       selects.forEach(select => {
         select.addEventListener('change', function() {
@@ -291,7 +302,7 @@
         });
       });
 
-      // 3. Submit Logic
+      // --- INSTANT UI SWITCH LOGIC ---
       document.getElementById('admissionForm').addEventListener('submit', function(e) {
         e.preventDefault();
         var btn = document.getElementById('submit-btn');
@@ -320,6 +331,12 @@
                 payData: files[2].data, payName: files[2].name
             };
 
+            // 1. INSTANTLY HIDE FORM & SHOW SUCCESS WITH SPINNER
+            document.getElementById('form-section').classList.add('hidden');
+            document.getElementById('success-view').classList.remove('hidden');
+            document.getElementById('serial-display').innerHTML = '<div class="serial-loader"></div>';
+
+            // 2. START UPLOAD IN BACKGROUND
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify(formData)
@@ -327,20 +344,21 @@
             .then(response => response.json())
             .then(data => {
                 if(data.status === 'success') {
-                    btn.classList.remove('loading');
-                    btn.classList.add('success');
-                    setTimeout(() => {
-                      document.getElementById('form-section').classList.add('hidden');
-                      document.getElementById('success-view').classList.remove('hidden');
-                      document.getElementById('serial-display').textContent = data.serial;
-                    }, 1500);
+                    // 3. REPLACE SPINNER WITH ACTUAL NUMBER
+                    document.getElementById('serial-display').textContent = data.serial;
                 } else {
-                    alert("Error: " + data.message);
+                    // ERROR: Bring them back to form
+                    alert("Submission Failed: " + data.message);
+                    document.getElementById('success-view').classList.add('hidden');
+                    document.getElementById('form-section').classList.remove('hidden');
                     btn.disabled = false; btn.classList.remove('loading');
                 }
             })
             .catch(error => {
+                // ERROR: Bring them back to form
                 alert("Network Error: " + error);
+                document.getElementById('success-view').classList.add('hidden');
+                document.getElementById('form-section').classList.remove('hidden');
                 btn.disabled = false; btn.classList.remove('loading');
             });
         });
@@ -348,13 +366,3 @@
 
       function getFileData(id) {
         return new Promise(resolve => {
-            var file = document.getElementById(id).files[0];
-            if(!file) resolve({data:null, name:null});
-            var reader = new FileReader();
-            reader.onload = e => resolve({data:e.target.result, name:file.name});
-            reader.readAsDataURL(file);
-        });
-      }
-    </script>
-</body>
-</html>

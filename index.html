@@ -32,7 +32,7 @@
       }
       
       /* Input Styles */
-      input, select, textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFCF5; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
+      input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFCF5; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
       input::placeholder, textarea::placeholder { color: #999; } 
       input:focus, select:focus, textarea:focus { outline: none; border-color: #6D8196; border-width: 2px; }
       input[readonly] { background-color: #e9ecef; color: #4A4A4A; font-weight: bold; cursor: not-allowed; border: 1px dashed #ccc; }
@@ -42,7 +42,7 @@
       @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
       .hidden { display: none; }
       
-      /* Buttons */
+      /* Buttons (General) */
       .btn-primary { width: 70%; background-color: #6D8196; color: #FFFFE3; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; font-family: 'Montserrat', sans-serif; margin-top: 10px;}
       .btn-google { background-color: #DB4437; color: white; margin-top: 30px; } 
       .btn-primary:disabled { background-color: #ccc; cursor: wait; }
@@ -62,16 +62,7 @@
         align-items: center;
       }
       .user-info { text-align: left; }
-      .logout-btn {
-        background: none;
-        border: 1px solid #6D8196;
-        color: #6D8196;
-        padding: 5px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: bold;
-      }
+      .logout-btn { background: none; border: 1px solid #6D8196; color: #6D8196; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
       .logout-btn:hover { background: #6D8196; color: #fff; }
 
       /* Payment Options Styling */
@@ -80,16 +71,50 @@
         display: flex; align-items: center; cursor: pointer; font-weight: bold; background: white; padding: 0 20px; border: 1px solid #CBCBCB; border-radius: 4px; flex: 1; justify-content: center; transition: all 0.3s ease;
       }
       .radio-label input { width: auto; margin-right: 8px; margin-top: 14px; }
+      .radio-label svg { height: 24px; width: auto; margin-left: 8px; vertical-align: middle; }
+      .radio-label:hover { border-color: #6D8196; background-color: #F4F8FB; }
+
+      /* --- NEW FILE UPLOAD BUTTON STYLES (FROM YOUR REQUEST) --- */
+      .file-input-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+      .hidden-input { display: none; } /* Hides the ugly default input */
       
-      /* Payment Icons Styling */
-      .radio-label svg { 
-          height: 24px; /* Fixed height */
-          width: auto;  /* Width adjusts automatically */
-          margin-left: 8px; /* Space between Text and Icon */
-          vertical-align: middle;
+      .add-file-btn {
+        border: none;
+        display: flex;
+        padding: 0.75rem 1.5rem;
+        background-color: #488aec; /* YOUR REQUESTED COLOR */
+        color: #ffffff;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        font-weight: 700;
+        text-align: center;
+        cursor: pointer;
+        text-transform: uppercase;
+        vertical-align: middle;
+        align-items: center;
+        border-radius: 0.5rem;
+        user-select: none;
+        gap: 0.75rem;
+        box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
+        transition: all 0.6s ease;
+        font-family: 'Lato', sans-serif;
+      }
+
+      .add-file-btn:hover {
+        box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
+      }
+
+      .add-file-btn:focus, .add-file-btn:active {
+        opacity: 0.85;
+        box-shadow: none;
+      }
+
+      .add-file-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
       }
       
-      .radio-label:hover { border-color: #6D8196; background-color: #F4F8FB; }
+      .file-name-display { font-size: 0.9em; color: #666; font-style: italic; }
 
       /* Submit Button Animation */
       .submit-wrapper { display: flex; justify-content: center; margin-top: 40px; height: 60px; }
@@ -201,15 +226,33 @@
             </select>
 
             <div class="section-header">5. Documents</div>
-            <span class="file-label">Passport Sized Photo (less than 1MB)</span><input type="file" id="photoFile" accept="image/*" required>
-            <span class="file-label">Last Qualification Document (less than 1MB)</span><input type="file" id="docFile" accept="image/*,.pdf" required>
+            
+            <span class="file-label">Passport Sized Photo (less than 1MB)</span>
+            <div class="file-input-wrapper">
+                <input type="file" id="photoFile" accept="image/*" class="hidden-input" required>
+                <button type="button" class="add-file-btn" onclick="document.getElementById('photoFile').click()">
+                    <svg aria-hidden="true" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke-width="2" stroke="#ffffff" d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke-linejoin="round" stroke-linecap="round"></path><path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M17 15V18M17 21V18M17 18H14M17 18H20"></path></svg>
+                    ADD FILE
+                </button>
+                <span id="photoFile-name" class="file-name-display">No file chosen</span>
+            </div>
+
+            <span class="file-label">Last Qualification Document (less than 1MB)</span>
+            <div class="file-input-wrapper">
+                <input type="file" id="docFile" accept="image/*,.pdf" class="hidden-input" required>
+                <button type="button" class="add-file-btn" onclick="document.getElementById('docFile').click()">
+                     <svg aria-hidden="true" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke-width="2" stroke="#ffffff" d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke-linejoin="round" stroke-linecap="round"></path><path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M17 15V18M17 21V18M17 18H14M17 18H20"></path></svg>
+                    ADD FILE
+                </button>
+                <span id="docFile-name" class="file-name-display">No file chosen</span>
+            </div>
 
             <div class="section-header">6. Payment</div>
             <p style="text-align:center; color:#4A4A4A; margin-bottom:5px; font-weight:bold;">
-                Please pay admission fee  <span style="font-size: 1.4em; color: #2c3e50;"> Rs 1000/- </span>  Only.
+                Please pay admission fee <span style="font-size: 1.4em; color: #2c3e50;">Rs 1000/-</span> Only.
             </p>
-            <p style="text-align:left; color:#6D8196; margin-top:15px; margin-bottom:5px; font-weight:bold; font-size: 0.85em;">
-                Select Payment Mode
+            <p style="text-align:left; color:#6D8196; margin-top:10px; margin-bottom:10px; font-weight:bold; font-size: 0.9em;">
+                Select Payment Mode:
             </p>
 
             <div class="payment-options">
@@ -226,9 +269,17 @@
             </div>
             
             <div id="online-payment-section">
-                <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1&cu=INR&tn=Admission%20Fee" class="pay-btn">Click to Pay via UPI App</a>
+                <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1000&cu=INR&tn=Admission/Registration%20Fee" class="pay-btn">Click to Pay via UPI App</a>
                 <span class="file-label">Upload Payment Screenshot (less than 1MB)</span>
-                <input type="file" id="payFile" accept="image/*">
+                
+                <div class="file-input-wrapper">
+                    <input type="file" id="payFile" accept="image/*" class="hidden-input">
+                    <button type="button" class="add-file-btn" onclick="document.getElementById('payFile').click()">
+                        <svg aria-hidden="true" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke-width="2" stroke="#ffffff" d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke-linejoin="round" stroke-linecap="round"></path><path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M17 15V18M17 21V18M17 18H14M17 18H20"></path></svg>
+                        ADD FILE
+                    </button>
+                    <span id="payFile-name" class="file-name-display">No file chosen</span>
+                </div>
             </div>
 
             <div class="section-header">7. Additional Notes</div>
@@ -293,6 +344,10 @@
           const form = document.getElementById('admissionForm');
           if(form) form.reset();
           document.getElementById('online-payment-section').classList.remove('hidden');
+          // Reset file names too
+          const fileSpans = document.querySelectorAll('.file-name-display');
+          fileSpans.forEach(span => span.textContent = 'No file chosen');
+          
           const btn = document.getElementById('submit-btn');
           if(btn) {
               btn.classList.remove('loading', 'success');
@@ -332,6 +387,15 @@
             if(fileInput.files[0].size > MAX_SIZE) {
                 alert("File is too big! Max size is 1MB.");
                 fileInput.value = ""; 
+                // Reset text if file is cleared
+                const displayId = fileInput.id + "-name";
+                const display = document.getElementById(displayId);
+                if(display) display.textContent = "No file chosen";
+            } else {
+                // Update text to show filename
+                const displayId = fileInput.id + "-name";
+                const display = document.getElementById(displayId);
+                if(display) display.textContent = fileInput.files[0].name;
             }
         }
       }

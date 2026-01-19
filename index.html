@@ -309,13 +309,13 @@
     </script>
 
     <script>
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPAb-yZwLJZb_Bf-99zDJ9vVMPl2X3aANHMT9JASIllnNBkMcl9pxWnZaN2Fy_IEzf/exec"; 
-      const MAX_SIZE = 2 * 1024 * 1024; // 2MB Limit
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3srib57bQdZ0OVPGw09t0Qw0piZ0Bla367-gJuTdiZkTpIiHYwH/exec"; 
+      const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
 
       function checkFileSize(fileInput) {
         if(fileInput.files.length > 0) {
             if(fileInput.files[0].size > MAX_SIZE) {
-                alert("File is too big! Max size is 2MB.");
+                alert("File is too big! Max size is 1MB.");
                 fileInput.value = ""; 
             }
         }

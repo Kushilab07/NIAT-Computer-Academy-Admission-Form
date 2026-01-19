@@ -32,10 +32,11 @@
       }
       
       /* Input Styles */
-      input, select { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFFFF; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
-      input::placeholder { color: #999; } 
-      input:focus, select:focus { outline: none; border-color: #6D8196; border-width: 2px; }
+      input, select, textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #CBCBCB; background-color: #FFFFFF; border-radius: 2px; box-sizing: border-box; font-family: 'Lato', sans-serif; transition: border-color 0.3s; }
+      input::placeholder, textarea::placeholder { color: #999; } 
+      input:focus, select:focus, textarea:focus { outline: none; border-color: #6D8196; border-width: 2px; }
       input[readonly] { background-color: #e9ecef; color: #4A4A4A; font-weight: bold; cursor: not-allowed; border: 1px dashed #ccc; }
+      textarea { resize: vertical; height: 80px; }
 
       .row { display: flex; gap: 20px; } .col { flex: 1; }
       @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
@@ -73,6 +74,14 @@
       }
       .logout-btn:hover { background: #6D8196; color: #fff; }
 
+      /* Payment Options Styling */
+      .payment-options { display: flex; gap: 20px; margin-bottom: 20px; justify-content: center; }
+      .radio-label { 
+        display: flex; align-items: center; cursor: pointer; font-weight: bold; background: white; padding: 10px 20px; border: 1px solid #CBCBCB; border-radius: 4px; flex: 1; justify-content: center;
+      }
+      .radio-label input { width: auto; margin: 0 10px 0 0; }
+      .radio-label:hover { border-color: #6D8196; }
+
       /* Submit Button Animation */
       .submit-wrapper { display: flex; justify-content: center; margin-top: 40px; height: 60px; }
       #submit-btn { 
@@ -88,15 +97,8 @@
       #submit-btn.success span { opacity: 0; }
       #submit-btn.success svg { opacity: 1; fill: #28a745; transition: fill 0.3s ease; }
       
-      /* --- NEW SERIAL NUMBER SPINNER --- */
       .serial-loader {
-        border: 4px solid rgba(255, 255, 227, 0.3); /* Light Ivory transparent */
-        border-top: 4px solid #FFFFE3; /* Ivory */
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
+        border: 4px solid rgba(255, 255, 227, 0.3); border-top: 4px solid #FFFFE3; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block;
       }
       
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -123,6 +125,8 @@
 
       <div id="form-section" class="hidden">
         
+        <h2 style="font-family:'Montserrat', sans-serif; text-align:center; margin-bottom:15px; color:#4A4A4A;">Registration Form</h2>
+
         <div class="user-profile">
             <div class="user-info">
               <span id="user-display-name" style="font-weight:bold;">User</span>
@@ -192,11 +196,27 @@
             <span class="file-label">Last Qualification Document (less than 1MB)</span><input type="file" id="docFile" accept="image/*,.pdf" required>
 
             <div class="section-header">6. Payment</div>
-            <p style="text-align:center; color:#4A4A4A; margin-bottom:15px; font-weight:bold;">Please pay admission fee 1000 Rs.</p>
-            
-            <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1&cu=INR&tn=Admission%20Fee" class="pay-btn">Click to Pay via UPI App</a>
+            <p style="text-align:center; color:#4A4A4A; margin-bottom:15px; font-weight:bold;">
+                Please pay admission fee <span style="font-size: 1.4em; color: #2c3e50;">Rs 1000/-</span> Only.
+            </p>
 
-            <span class="file-label">Upload Payment Screenshot (less than 1MB)</span><input type="file" id="payFile" accept="image/*" required>
+            <div class="payment-options">
+                <label class="radio-label">
+                    <input type="radio" name="payMode" value="Online" checked> Pay Online
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="payMode" value="Cash"> Pay with Cash
+                </label>
+            </div>
+            
+            <div id="online-payment-section">
+                <a href="upi://pay?pa=indkiller192@oksbi&pn=Kushilab%20Deva%20Sarma&am=1&cu=INR&tn=Admission%20Fee" class="pay-btn">Click to Pay via UPI App</a>
+                <span class="file-label">Upload Payment Screenshot (less than 1MB)</span>
+                <input type="file" id="payFile" accept="image/*">
+            </div>
+
+            <div class="section-header">7. Additional Notes</div>
+            <textarea name="notes" placeholder="Any message for the administrator? (Optional)"></textarea>
 
             <div class="submit-wrapper">
               <button type="submit" id="submit-btn" class="noselect">
@@ -243,26 +263,33 @@
       const logoutBtnTop = document.getElementById('logout-btn-top');
       const logoutBtnBottom = document.getElementById('logout-btn-bottom');
 
-      loginBtn.addEventListener('click', () => {
-        signInWithPopup(auth, provider).catch((error) => { alert("Login Failed: " + error.message); });
-      });
+      if(loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          signInWithPopup(auth, provider).catch((error) => { alert("Login Failed: " + error.message); });
+        });
+      }
 
       const handleLogout = () => {
         signOut(auth).then(() => {
           document.getElementById('form-section').classList.add('hidden');
           document.getElementById('success-view').classList.add('hidden');
           document.getElementById('login-section').classList.remove('hidden');
-          document.getElementById('admissionForm').reset();
+          const form = document.getElementById('admissionForm');
+          if(form) form.reset();
+          // Reset visibility of payment section to default
+          document.getElementById('online-payment-section').classList.remove('hidden');
           const btn = document.getElementById('submit-btn');
-          btn.classList.remove('loading', 'success');
-          btn.disabled = false;
+          if(btn) {
+              btn.classList.remove('loading', 'success');
+              btn.disabled = false;
+          }
         }).catch((error) => {
           alert("Error signing out: " + error.message);
         });
       };
 
-      logoutBtnTop.addEventListener('click', handleLogout);
-      logoutBtnBottom.addEventListener('click', handleLogout);
+      if(logoutBtnTop) logoutBtnTop.addEventListener('click', handleLogout);
+      if(logoutBtnBottom) logoutBtnBottom.addEventListener('click', handleLogout);
 
       onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -270,8 +297,10 @@
           if(document.getElementById('success-view').classList.contains('hidden')){
              document.getElementById('form-section').classList.remove('hidden');
           }
-          document.getElementById('email-field').value = user.email;
-          document.getElementById('user-display-name').innerText = user.displayName;
+          const emailF = document.getElementById('email-field');
+          const nameF = document.getElementById('user-display-name');
+          if(emailF) emailF.value = user.email;
+          if(nameF) nameF.innerText = user.displayName;
         } else {
           document.getElementById('login-section').classList.remove('hidden');
           document.getElementById('form-section').classList.add('hidden');
@@ -300,6 +329,20 @@
       if(docF) docF.addEventListener('change', function() { checkFileSize(this) });
       if(payF) payF.addEventListener('change', function() { checkFileSize(this) });
 
+      // --- PAYMENT MODE TOGGLE ---
+      const payRadios = document.querySelectorAll('input[name="payMode"]');
+      const onlineSection = document.getElementById('online-payment-section');
+      
+      payRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+              if(this.value === 'Online') {
+                  onlineSection.classList.remove('hidden');
+              } else {
+                  onlineSection.classList.add('hidden');
+              }
+          });
+      });
+
       const selects = document.querySelectorAll('.course-select');
       selects.forEach(select => {
         select.addEventListener('change', function() {
@@ -307,22 +350,35 @@
         });
       });
 
-      // --- SUBMIT LOGIC WITH COMPLETE ANIMATION ---
+      // --- SUBMIT LOGIC ---
       const form = document.getElementById('admissionForm');
       if (form) {
           form.addEventListener('submit', function(e) {
             e.preventDefault(); 
             
+            // Check Payment Mode
+            const payMode = document.querySelector('input[name="payMode"]:checked').value;
+            
+            // Validation: If Online, Payment screenshot is mandatory
+            if (payMode === 'Online') {
+                const payFile = document.getElementById('payFile');
+                if(payFile.files.length === 0) {
+                    alert("Please upload the Payment Screenshot.");
+                    return;
+                }
+            }
+
             var btn = document.getElementById('submit-btn');
             if(btn) {
                 btn.disabled = true; 
-                btn.classList.add('loading'); // 1. Start Spinning
+                btn.classList.add('loading'); 
             }
 
             const filePromises = [
                 getFileData('photoFile'), 
                 getFileData('docFile'), 
-                getFileData('payFile')
+                // Only upload payFile if Online
+                (payMode === 'Online') ? getFileData('payFile') : Promise.resolve({data:"", name:""})
             ];
 
             Promise.all(filePromises).then(files => {
@@ -341,6 +397,9 @@
                     course6m: document.getElementsByName('course6m')[0].value,
                     course1y: document.getElementsByName('course1y')[0].value,
                     courseSp: document.getElementsByName('courseSp')[0].value,
+                    notes: document.getElementsByName('notes')[0].value, // New Notes field
+                    paymentMode: payMode, // New Payment Mode
+                    
                     photoData: files[0].data, photoName: files[0].name,
                     docData: files[1].data, docName: files[1].name,
                     payData: files[2].data, payName: files[2].name
@@ -355,23 +414,23 @@
                     body: JSON.stringify(formData)
                 }).then(response => response.json());
 
-                // --- START ANIMATION TIMER (2 Seconds Spin) ---
+                // --- START ANIMATION TIMER (2 Seconds) ---
                 const timerTask = new Promise(resolve => setTimeout(resolve, 2000));
 
                 timerTask.then(() => {
-                    // 2. STOP SPINNING, SHOW GREEN CHECK
+                    // STOP SPINNING, SHOW GREEN CHECK
                     if(btn) {
                         btn.classList.remove('loading');
                         btn.classList.add('success'); 
                     }
 
-                    // 3. WAIT 1 SECOND (To let user see the Green Check)
+                    // WAIT 1 SECOND (To let user see the Green Check)
                     setTimeout(() => {
-                        // 4. NOW SWITCH PAGE
+                        // NOW SWITCH PAGE
                         document.getElementById('form-section').classList.add('hidden');
                         document.getElementById('success-view').classList.remove('hidden');
                         
-                        // 5. HANDLE SERVER RESPONSE
+                        // HANDLE SERVER RESPONSE
                         uploadTask.then(data => {
                             if(data.status === 'success') {
                                 if(serialDisplay) serialDisplay.textContent = data.serial;
@@ -381,7 +440,7 @@
                         }).catch(error => {
                             handleError("Network Error: " + error);
                         });
-                    }, 1000); // 1 Second delay for Green Check
+                    }, 1000); 
                 });
             });
           });
@@ -395,7 +454,7 @@
         if(btn) {
             btn.disabled = false; 
             btn.classList.remove('loading');
-            btn.classList.remove('success'); // Reset checkmark too
+            btn.classList.remove('success'); 
         }
       }
 

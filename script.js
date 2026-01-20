@@ -123,11 +123,21 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
       });
 
       const selects = document.querySelectorAll('.course-select');
-      selects.forEach(select => {
-        select.addEventListener('change', function() {
-          if(this.value !== "") selects.forEach(other => { if(other !== this) other.value = ""; other.classList.remove('filled-input'); });
+selects.forEach(select => {
+  select.addEventListener('change', function() {
+    if(this.value !== "") {
+        selects.forEach(other => { 
+            // OPEN BRACE START
+            if(other !== this) { 
+                other.value = ""; 
+                other.classList.remove('filled-input'); 
+            } 
+            // CLOSE BRACE END
         });
-      });
+    }
+  });
+});
+
 
       // --- SUBMIT LOGIC ---
       const form = document.getElementById('admissionForm');

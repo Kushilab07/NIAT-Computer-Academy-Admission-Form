@@ -266,3 +266,29 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+// --- DISABLE RIGHT-CLICK & INSPECT SHORTCUTS ---
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault(); // Disables right-click menu
+});
+
+document.addEventListener('keydown', function(event) {
+    // Disable F12
+    if (event.key === "F12") {
+        event.preventDefault();
+    }
+    
+    // Disable Ctrl+Shift+I (Inspect)
+    if (event.ctrlKey && event.shiftKey && event.key === "I") {
+        event.preventDefault();
+    }
+
+    // Disable Ctrl+Shift+J (Console)
+    if (event.ctrlKey && event.shiftKey && event.key === "J") {
+        event.preventDefault();
+    }
+
+    // Disable Ctrl+U (View Source)
+    if (event.ctrlKey && event.key === "u") {
+        event.preventDefault();
+    }
+});

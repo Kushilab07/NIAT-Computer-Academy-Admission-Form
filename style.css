@@ -39,7 +39,7 @@
       .btn-primary:disabled { background-color: #ccc; cursor: wait; }
 
       /* Pay Button */
-      .pay-btn { display: block; width: 70%; text-align: center; align-items: center; justify-content: center; margin: 0 auto 20px auto; background-color: #4A4A4A; color: #FFFFE3; text-decoration: none; padding: 15px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; box-sizing: border-box; }
+      .pay-btn { display: block; width: 70%; text-align: center; align-items: center; justify-content: center; margin: 0 auto 20px auto; background-color: #6D8196; color: #FFFFE3; text-decoration: none; padding: 15px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; box-sizing: border-box; }
 
       /* Profile Box & Logout */
       .user-profile { 
@@ -75,7 +75,7 @@
         padding: 0.5rem 1rem;
         background-color: #6D8196; /* YOUR REQUESTED COLOR */
         color: #ffffff;
-        font-size: 0.75rem;
+        font-size: 0.55rem;
         line-height: 1rem;
         font-weight: 700;
         text-align: center;

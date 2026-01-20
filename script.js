@@ -45,7 +45,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           
           // Reset file names text
           const fileSpans = document.querySelectorAll('.file-name-display');
-          fileSpans.forEach(span => span.textContent = 'No file added);
+          fileSpans.forEach(span => span.textContent = 'No file added');
           
           const btn = document.getElementById('submit-btn');
           if(btn) {

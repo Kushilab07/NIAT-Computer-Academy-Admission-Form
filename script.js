@@ -45,7 +45,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           
           // Reset file names text
           const fileSpans = document.querySelectorAll('.file-name-display');
-          fileSpans.forEach(span => span.textContent = 'No file chosen');
+          fileSpans.forEach(span => span.textContent = 'No file added);
           
           const btn = document.getElementById('submit-btn');
           if(btn) {
@@ -88,14 +88,14 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
             if(fileInput.files[0].size > MAX_SIZE) {
                 alert("File is too big! Max size is 1MB.");
                 fileInput.value = ""; 
-                if(display) display.textContent = "No file chosen";
+                if(display) display.textContent = "No file added";
             } else {
                 // Update text to show filename
                 if(display) display.textContent = fileInput.files[0].name;
             }
         } else {
             // User opened dialog but clicked Cancel (reset text)
-            if(display) display.textContent = "No file chosen";
+            if(display) display.textContent = "No file added";
         }
             }
 
@@ -125,7 +125,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
       const selects = document.querySelectorAll('.course-select');
       selects.forEach(select => {
         select.addEventListener('change', function() {
-          if(this.value !== "") selects.forEach(other => { if(other !== this) other.value = ""; });
+          if(this.value !== "") selects.forEach(other => { if(other !== this) other.value = ""; other.classList.remove('filled-input'); });
         });
       });
 

@@ -63,6 +63,10 @@
       }
       .radio-label input { width: auto; margin-right: 8px; margin-bottom: 1px }
       .radio-label svg { height: 24px; width: auto; margin-left: 8px; vertical-align: middle; }
+      /* Override ONLY for the UPI icon */
+      #upi {
+          height: 16px; /* Make this smaller (try 15px or 16px) */
+      }
       .radio-label:hover { border-color: #6D8196; background-color: #F4F8FB; }
 
       /* --- NEW FILE UPLOAD BUTTON STYLES (FROM YOUR REQUEST) --- */
@@ -75,7 +79,7 @@
         padding: 0.5rem 1rem;
         background-color: #6D8196; /* YOUR REQUESTED COLOR */
         color: #ffffff;
-        font-size: 0.55rem;
+        font-size: 0.70rem;
         line-height: 1rem;
         font-weight: 700;
         text-align: center;

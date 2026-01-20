@@ -69,23 +69,25 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3srib57bQdZ0OVPGw09t0Qw0piZ0Bla367-gJuTdiZkTpIiHYwH/exec"; 
       const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
 
-      function checkFileSize(fileInput) {
+            function checkFileSize(fileInput) {
+        const displayId = fileInput.id + "-name";
+        const display = document.getElementById(displayId);
+
         if(fileInput.files.length > 0) {
             if(fileInput.files[0].size > MAX_SIZE) {
                 alert("File is too big! Max size is 1MB.");
                 fileInput.value = ""; 
-                // Reset text if file is cleared
-                const displayId = fileInput.id + "-name";
-                const display = document.getElementById(displayId);
                 if(display) display.textContent = "No file chosen";
             } else {
                 // Update text to show filename
-                const displayId = fileInput.id + "-name";
-                const display = document.getElementById(displayId);
                 if(display) display.textContent = fileInput.files[0].name;
             }
+        } else {
+            // User opened dialog but clicked Cancel (reset text)
+            if(display) display.textContent = "No file chosen";
         }
-      }
+            }
+
       
       const photoF = document.getElementById('photoFile');
       const docF = document.getElementById('docFile');

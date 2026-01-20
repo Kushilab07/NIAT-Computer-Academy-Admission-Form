@@ -133,3 +133,11 @@
       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
       .noselect { user-select: none; }
       .file-label { display: block; font-size: 0.85em; font-weight: bold; margin-bottom: 5px; color: #6D8196; }
+
+      /* This class only changes COLORS. No visual blurring happens here. */
+.filled-input {
+    background-color: #E8F0FE !important; /* Light Blue Background */
+    border-color: #6D8196 !important;     /* Darker Border */
+    color: #2c3e50 !important;            /* Sharp Dark Text */
+}
+

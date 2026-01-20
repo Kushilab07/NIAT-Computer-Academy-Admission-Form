@@ -61,7 +61,7 @@
       .radio-label { 
         display: flex; align-items: center; cursor: pointer; font-weight: bold; background: white; padding: 10px 5px; border: 1px solid #CBCBCB; border-radius: 40px; flex: 1 1 0; justify-content: center; transition: all 0.3s ease;
       }
-      .radio-label input { width: auto; margin-right: 8px; margin-bottom: 2px }
+      .radio-label input { width: auto; margin-right: 8px; margin-bottom: 1px }
       .radio-label svg { height: 24px; width: auto; margin-left: 8px; vertical-align: middle; }
       .radio-label:hover { border-color: #6D8196; background-color: #F4F8FB; }
 
@@ -72,7 +72,7 @@
       .add-file-btn {
         border: none;
         display: flex;
-        padding: 0.95rem 2rem;
+        padding: 0.5rem 1rem;
         background-color: #488aec; /* YOUR REQUESTED COLOR */
         color: #ffffff;
         font-size: 0.75rem;

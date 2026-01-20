@@ -120,7 +120,16 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
       const form = document.getElementById('admissionForm');
       if (form) {
           form.addEventListener('submit', function(e) {
-            e.preventDefault(); 
+            e.preventDefault();
+                            // --- NEW VALIDATION: Check Photo & Doc ---
+            if(document.getElementById('photoFile').files.length === 0) {
+                alert("Please upload your Passport Photo.");
+                return; // Stop submission
+            }
+            if(document.getElementById('docFile').files.length === 0) {
+                alert("Please upload your Qualification Document.");
+                return; // Stop submission
+            }
             
             const payMode = document.querySelector('input[name="payMode"]:checked').value;
             

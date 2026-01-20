@@ -244,3 +244,25 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
             }
         });
       }
+
+// --- INTERACTIVE FIELD COLOR LOGIC ---
+document.addEventListener("DOMContentLoaded", function() {
+    const inputs = document.querySelectorAll("input[type='text'], input[type='email'], input[type='tel'], input[type='number'], textarea, select");
+
+    inputs.forEach(input => {
+        // 1. WHEN USER LEAVES THE FIELD (BLUR)
+        input.addEventListener("blur", function() {
+            if (this.value.trim() !== "") {
+                this.classList.add("filled-input"); 
+            } else {
+                this.classList.remove("filled-input"); 
+            }
+        });
+
+        // 2. WHEN USER CLICKS BACK INTO THE FIELD (FOCUS)
+        input.addEventListener("focus", function() {
+            this.classList.remove("filled-input"); 
+        });
+    });
+});
+

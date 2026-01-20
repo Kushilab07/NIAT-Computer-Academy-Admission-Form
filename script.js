@@ -25,15 +25,25 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         });
       }
 
-      const handleLogout = () => {
+            const handleLogout = () => {
         signOut(auth).then(() => {
+          // 1. Hide Views
           document.getElementById('form-section').classList.add('hidden');
           document.getElementById('success-view').classList.add('hidden');
           document.getElementById('login-section').classList.remove('hidden');
+          
+          // 2. Reset Form Data
           const form = document.getElementById('admissionForm');
           if(form) form.reset();
+          
+          // 3. THIS IS THE NEW PART: Remove the blue color from all fields
+          const filledInputs = document.querySelectorAll('.filled-input');
+          filledInputs.forEach(input => input.classList.remove('filled-input'));
+
+          // 4. Reset Payment & Button States
           document.getElementById('online-payment-section').classList.remove('hidden');
-          // Reset file names too
+          
+          // Reset file names text
           const fileSpans = document.querySelectorAll('.file-name-display');
           fileSpans.forEach(span => span.textContent = 'No file chosen');
           
@@ -46,6 +56,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
           alert("Error signing out: " + error.message);
         });
       };
+
 
       if(logoutBtnTop) logoutBtnTop.addEventListener('click', handleLogout);
       if(logoutBtnBottom) logoutBtnBottom.addEventListener('click', handleLogout);
@@ -245,26 +256,37 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3sri
         });
       }
 
-// --- INTERACTIVE FIELD COLOR LOGIC ---
+// --- IMPROVED INTERACTIVE FIELD COLOR LOGIC ---
 document.addEventListener("DOMContentLoaded", function() {
+    // Select all inputs, textareas, AND select dropdowns
     const inputs = document.querySelectorAll("input[type='text'], input[type='email'], input[type='tel'], input[type='number'], textarea, select");
 
     inputs.forEach(input => {
-        // 1. WHEN USER LEAVES THE FIELD (BLUR)
-        input.addEventListener("blur", function() {
-            if (this.value.trim() !== "") {
-                this.classList.add("filled-input"); 
+        
+        // 1. HELPER FUNCTION: Updates color based on value
+        const updateColor = () => {
+             if (input.value.trim() !== "") {
+                input.classList.add("filled-input"); 
             } else {
-                this.classList.remove("filled-input"); 
+                input.classList.remove("filled-input"); 
             }
-        });
+        };
 
-        // 2. WHEN USER CLICKS BACK INTO THE FIELD (FOCUS)
+        // 2. WHEN USER LEAVES THE FIELD (BLUR) -> Standard for text boxes
+        input.addEventListener("blur", updateColor);
+
+        // 3. WHEN USER SELECTS AN OPTION (CHANGE) -> Specific fix for Dropdowns
+        if(input.tagName === "SELECT") {
+            input.addEventListener("change", updateColor);
+        }
+
+        // 4. WHEN USER CLICKS BACK INTO THE FIELD (FOCUS) -> Turn normal for editing
         input.addEventListener("focus", function() {
             this.classList.remove("filled-input"); 
         });
     });
 });
+
 
 // --- DISABLE RIGHT-CLICK & INSPECT SHORTCUTS ---
 document.addEventListener('contextmenu', function(event) {

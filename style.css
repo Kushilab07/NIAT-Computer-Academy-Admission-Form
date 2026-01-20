@@ -65,7 +65,7 @@
       .radio-label svg { height: 24px; width: auto; margin-left: 8px; vertical-align: middle; }
       /* Override ONLY for the UPI icon */
       #upi {
-          height: 16px; /* Make this smaller (try 15px or 16px) */
+          height: 20px; /* Make this smaller (try 15px or 16px) */
       }
       .radio-label:hover { border-color: #6D8196; background-color: #F4F8FB; }
 

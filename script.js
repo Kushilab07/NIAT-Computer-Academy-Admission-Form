@@ -77,8 +77,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         }
       });
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2PI0qFO1Hho0_x3srib57bQdZ0OVPGw09t0Qw0piZ0Bla367-gJuTdiZkTpIiHYwH/exec"; 
-      const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
+// --- NEW CODE (ADDED) ---
+const URL_ARIKUCHI = "https://script.google.com/macros/s/AKfycbxEmGsrzFevu5gGrP4ZraJPBou951DwBtulztu4Z0ohism50L7TwKQujzFvVMOUFIY/exec"; 
+const URL_BAGALS   = "https://script.google.com/macros/s/AKfycbyaH3DPQ7yutBnDFywv97J_hKqALZk7m_dNhhMfYFGVvCZZeVDYqPJ3-avrVsv5IUVU/exec";
+const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
 
             function checkFileSize(fileInput) {
         const displayId = fileInput.id + "-name";
@@ -177,7 +179,23 @@ selects.forEach(select => {
             ];
 
             Promise.all(filePromises).then(files => {
+                // --- NEW CODE (ADDED) ---
+// 1. GET SELECTED BRANCH & CHOOSE URL
+const branchValue = document.getElementById('branch-select').value;
+let targetURL;
+
+if (branchValue === "Arikuchi") {
+    targetURL = URL_ARIKUCHI;
+} else if (branchValue === "Bagals Road") {
+    targetURL = URL_BAGALS;
+} else {
+    // Safety check: Stop if empty
+    alert("Please select an Institute Branch at the top.");
+    if(btn) { btn.classList.remove('loading'); btn.disabled = false; }
+    return; 
+}
                 var formData = {
+                    branch: branchValue, // <--- NEW LINE ADDED HERE
                     studentName: document.getElementsByName('studentName')[0].value,
                     fatherName: document.getElementsByName('fatherName')[0].value,
                     email: document.getElementById('email-field').value, 
@@ -204,10 +222,11 @@ selects.forEach(select => {
                 if(serialDisplay) serialDisplay.innerHTML = '<div class="serial-loader"></div>';
 
                 // --- START UPLOAD ---
-                const uploadTask = fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData)
-                }).then(response => response.json());
+                // --- NEW CODE ---
+const uploadTask = fetch(targetURL, { // <--- CHANGED THIS
+    method: 'POST',
+    body: JSON.stringify(formData)
+}).then(response => response.json());
 
                 // --- START ANIMATION TIMER (2 Seconds) ---
                 const timerTask = new Promise(resolve => setTimeout(resolve, 2000));

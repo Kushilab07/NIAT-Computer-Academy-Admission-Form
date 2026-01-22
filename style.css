@@ -31,7 +31,7 @@
 
       .row { display: flex; gap: 20px; } .col { flex: 1; }
       @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
-      .hidden { display: none; }
+      .hidden { display: none !important; }
       
       /* Buttons (General) */
       .btn-primary { width: 70%; background-color: #6D8196; color: #FFFFE3; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; font-family: 'Montserrat', sans-serif; margin-top: 10px;}

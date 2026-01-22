@@ -222,41 +222,50 @@ if (branchValue === "Arikuchi") {
                 if(serialDisplay) serialDisplay.innerHTML = '<div class="serial-loader"></div>';
 
                 // --- START UPLOAD ---
-                // --- NEW CODE ---
-const uploadTask = fetch(targetURL, { // <--- CHANGED THIS
-    method: 'POST',
-    body: JSON.stringify(formData)
-}).then(response => response.json());
+                // --- NEW SYNCHRONIZED UPLOAD LOGIC ---
+                
+                // 1. Start the Upload (Real Network Request)
+                const uploadPromise = fetch(targetURL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                }).then(response => response.json());
 
-                // --- START ANIMATION TIMER (2 Seconds) ---
-                const timerTask = new Promise(resolve => setTimeout(resolve, 2000));
+                // 2. Start the Animation Timer (Minimum 2 Seconds)
+                const timerPromise = new Promise(resolve => setTimeout(resolve, 2000));
 
-                timerTask.then(() => {
-                    // STOP SPINNING, SHOW GREEN CHECK
-                    if(btn) {
-                        btn.classList.remove('loading');
-                        btn.classList.add('success'); 
-                    }
-
-                    // WAIT 1 SECOND (To let user see the Green Check)
-                    setTimeout(() => {
-                        // NOW SWITCH PAGE
-                        document.getElementById('form-section').classList.add('hidden');
-                        document.getElementById('success-view').classList.remove('hidden');
+                // 3. WAIT FOR BOTH TO FINISH
+                // This guarantees the Green Check ONLY appears if data is actually saved.
+                Promise.all([uploadPromise, timerPromise])
+                .then(([data, timerResult]) => {
+                    
+                    // CHECK: Did the Google Script say "success"?
+                    if(data.status === 'success') {
                         
-                        // HANDLE SERVER RESPONSE
-                        uploadTask.then(data => {
-                            if(data.status === 'success') {
-                                if(serialDisplay) serialDisplay.textContent = data.serial;
-                            } else {
-                                handleError("Submission Failed: " + data.message);
-                            }
-                        }).catch(error => {
-                            handleError("Network Error: " + error);
-                        });
-                    }, 1000); 
+                        // A. SUCCESS: Show Green Check
+                        if(btn) {
+                            btn.classList.remove('loading');
+                            btn.classList.add('success'); 
+                        }
+
+                        // Wait 1 second for user to see Green Check, then switch page
+                        setTimeout(() => {
+                            document.getElementById('form-section').classList.add('hidden');
+                            document.getElementById('success-view').classList.remove('hidden');
+                            
+                            if(serialDisplay) serialDisplay.textContent = data.serial;
+                        }, 1000);
+
+                    } else {
+                        // B. SCRIPT ERROR: Script ran, but returned error (e.g., sheet locked)
+                        handleError("Submission Failed: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    // C. NETWORK ERROR: Internet cut out or timeout
+                    handleError("Network Error: " + error);
                 });
-            });
+
+            }); // End of Promise.all(filePromises)
           });
       }
 

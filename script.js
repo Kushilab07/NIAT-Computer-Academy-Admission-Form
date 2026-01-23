@@ -78,8 +78,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
       });
 
 // --- NEW CODE (ADDED) ---
-const URL_ARIKUCHI = "https://script.google.com/macros/s/AKfycbxEmGsrzFevu5gGrP4ZraJPBou951DwBtulztu4Z0ohism50L7TwKQujzFvVMOUFIY/exec"; 
-const URL_BAGALS   = "https://script.google.com/macros/s/AKfycbyaH3DPQ7yutBnDFywv97J_hKqALZk7m_dNhhMfYFGVvCZZeVDYqPJ3-avrVsv5IUVU/exec";
+const URL_ARIKUCHI = "https://script.google.com/macros/s/AKfycbwAuL-1Il5Ux9MS_DPUU20w7C-h1QVZP8oJ2_XXWAlqbnwXKS51WD99NDGGwHMzk3AL/exec"; 
+const URL_BAGALS   = "https://script.google.com/macros/s/AKfycbxvaMe5DDUsEOzyrsI0mjmr0IBAA9HhDpE8l_G54p_NIIPY60ol2aBXfI2qQtH7BcP8/exec";
 const MAX_SIZE = 1 * 1024 * 1024; // 1MB Limit
 
             function checkFileSize(fileInput) {

@@ -140,38 +140,94 @@ selects.forEach(select => {
   });
 });
 
-
-      // --- SUBMIT LOGIC ---
+         // --- SUBMIT & PREVIEW LOGIC ---
       const form = document.getElementById('admissionForm');
+      const previewModal = document.getElementById('preview-modal');
+      const previewDataBox = document.getElementById('preview-data');
+      const finalSubmitBtn = document.getElementById('final-submit-btn');
+      const editBtn = document.getElementById('edit-btn');
+      const finalSpinner = document.getElementById('final-spinner');
+
+      // 1. PREVIEW BUTTON CLICK (Validates form & Opens Modal)
       if (form) {
           form.addEventListener('submit', function(e) {
-            e.preventDefault();
-                            // --- NEW VALIDATION: Check Photo & Doc ---
+            e.preventDefault(); // Stop actual submit
+            
+            // Basic Validation Check
+            if(!document.getElementById('declaration').checked) {
+                alert("Please tick the declaration box.");
+                return;
+            }
             if(document.getElementById('photoFile').files.length === 0) {
-                alert("Please upload your Passport Photo.");
-                return; // Stop submission
+                alert("Please upload your Passport Photo."); return; 
             }
             if(document.getElementById('docFile').files.length === 0) {
-                alert("Please upload your Qualification Document.");
-                return; // Stop submission
+                alert("Please upload your Qualification Document."); return; 
             }
+            const payMode = document.querySelector('input[name="payMode"]:checked').value;
+            if (payMode === 'Online' && document.getElementById('payFile').files.length === 0) {
+                alert("Please upload the Payment Screenshot."); return;
+            }
+
+            // BUILD PREVIEW CONTENT
+            let html = "";
+            let htmlTable = `<table style="width:100%; border-collapse:collapse;">`;
             
+            // Helper to get course
+            let selectedCourse = "";
+            const courseSelects = document.querySelectorAll('.course-select');
+            courseSelects.forEach(s => { if(s.value) selectedCourse = s.value; });
+
+            const fields = [
+                { label: "Branch", val: document.getElementById('branch-select').value },
+                { label: "Student Name", val: document.getElementsByName('studentName')[0].value },
+                { label: "Father's Name", val: document.getElementsByName('fatherName')[0].value },
+                { label: "Email", val: document.getElementById('email-field').value },
+                { label: "Contact", val: document.getElementsByName('contact')[0].value },
+                { label: "Address", val: `${document.getElementsByName('village')[0].value}, ${document.getElementsByName('district')[0].value}` },
+                { label: "Course Applied", val: selectedCourse },
+                { label: "Payment Mode", val: payMode },
+                { label: "Photo", val: document.getElementById('photoFile').files[0].name },
+                { label: "Document", val: document.getElementById('docFile').files[0].name }
+            ];
+
+            fields.forEach(field => {
+                if(field.val && field.val !== "") {
+                    htmlTable += `<tr>
+                        <td style="padding:8px; border-bottom:1px solid #eee; font-weight:bold; color:#6D8196; width:40%;">${field.label}</td>
+                        <td style="padding:8px; border-bottom:1px solid #eee; color:#333;">${field.val}</td>
+                    </tr>`;
+                }
+            });
+            htmlTable += `</table>`;
+
+            // Show Modal
+            previewDataBox.innerHTML = htmlTable;
+            previewModal.classList.remove('hidden');
+          });
+      }
+
+      // 2. EDIT BUTTON (Closes Modal)
+      if(editBtn) {
+          editBtn.addEventListener('click', (e) => {
+              e.preventDefault(); // Stop button default
+              previewModal.classList.add('hidden');
+          });
+      }
+
+      // 3. FINAL SUBMIT BUTTON (Sends Data)
+      if(finalSubmitBtn) {
+          finalSubmitBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Stop button default
+
+            // Disable button & Show spinner
+            finalSubmitBtn.disabled = true;
+            if(finalSpinner) finalSpinner.classList.remove('hidden-spinner');
+            
+            // Get Data Again
             const payMode = document.querySelector('input[name="payMode"]:checked').value;
             
-            if (payMode === 'Online') {
-                const payFile = document.getElementById('payFile');
-                if(payFile.files.length === 0) {
-                    alert("Please upload the Payment Screenshot.");
-                    return;
-                }
-            }
-
-            var btn = document.getElementById('submit-btn');
-            if(btn) {
-                btn.disabled = true; 
-                btn.classList.add('loading'); 
-            }
-
+            // Use Helper function for files
             const filePromises = [
                 getFileData('photoFile'), 
                 getFileData('docFile'), 
@@ -179,23 +235,14 @@ selects.forEach(select => {
             ];
 
             Promise.all(filePromises).then(files => {
-                // --- NEW CODE (ADDED) ---
-// 1. GET SELECTED BRANCH & CHOOSE URL
-const branchValue = document.getElementById('branch-select').value;
-let targetURL;
-
-if (branchValue === "Arikuchi") {
-    targetURL = URL_ARIKUCHI;
-} else if (branchValue === "Bagals Road") {
-    targetURL = URL_BAGALS;
-} else {
-    // Safety check: Stop if empty
-    alert("Please select an Institute Branch at the top.");
-    if(btn) { btn.classList.remove('loading'); btn.disabled = false; }
-    return; 
-}
+                // GET URL
+                const branchValue = document.getElementById('branch-select').value;
+                let targetURL;
+                if (branchValue === "Arikuchi") targetURL = URL_ARIKUCHI;
+                else if (branchValue === "Bagals Road") targetURL = URL_BAGALS;
+                
                 var formData = {
-                    branch: branchValue, // <--- NEW LINE ADDED HERE
+                    branch: branchValue,
                     studentName: document.getElementsByName('studentName')[0].value,
                     fatherName: document.getElementsByName('fatherName')[0].value,
                     email: document.getElementById('email-field').value, 
@@ -212,7 +259,6 @@ if (branchValue === "Arikuchi") {
                     courseSp: document.getElementsByName('courseSp')[0].value,
                     notes: document.getElementsByName('notes')[0].value, 
                     paymentMode: payMode, 
-                    
                     photoData: files[0].data, photoName: files[0].name,
                     docData: files[1].data, docName: files[1].name,
                     payData: files[2].data, payName: files[2].name
@@ -221,51 +267,39 @@ if (branchValue === "Arikuchi") {
                 const serialDisplay = document.getElementById('serial-display');
                 if(serialDisplay) serialDisplay.innerHTML = '<div class="serial-loader"></div>';
 
-                // --- START UPLOAD ---
-                // --- NEW SYNCHRONIZED UPLOAD LOGIC ---
-                
-                // 1. Start the Upload (Real Network Request)
+                // Prevent Refresh during upload
+                const preventLeave = (e) => { e.preventDefault(); e.returnValue = ''; };
+                window.addEventListener('beforeunload', preventLeave);
+
+                // Start Upload
                 const uploadPromise = fetch(targetURL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData)
+                    method: 'POST', body: JSON.stringify(formData)
                 }).then(response => response.json());
 
-                // 2. Start the Animation Timer (Minimum 2 Seconds)
+                // Timer (2 Seconds)
                 const timerPromise = new Promise(resolve => setTimeout(resolve, 2000));
 
-                // 3. WAIT FOR BOTH TO FINISH
-                // This guarantees the Green Check ONLY appears if data is actually saved.
                 Promise.all([uploadPromise, timerPromise])
                 .then(([data, timerResult]) => {
+                    window.removeEventListener('beforeunload', preventLeave);
                     
-                    // CHECK: Did the Google Script say "success"?
                     if(data.status === 'success') {
+                        // Close Modal
+                        previewModal.classList.add('hidden');
                         
-                        // A. SUCCESS: Show Green Check
-                        if(btn) {
-                            btn.classList.remove('loading');
-                            btn.classList.add('success'); 
-                        }
-
-                        // Wait 1 second for user to see Green Check, then switch page
-                        setTimeout(() => {
-                            document.getElementById('form-section').classList.add('hidden');
-                            document.getElementById('success-view').classList.remove('hidden');
-                            
-                            if(serialDisplay) serialDisplay.textContent = data.serial;
-                        }, 1000);
-
+                        // Switch to Success View
+                        document.getElementById('form-section').classList.add('hidden');
+                        document.getElementById('success-view').classList.remove('hidden');
+                        if(serialDisplay) serialDisplay.textContent = data.serial;
                     } else {
-                        // B. SCRIPT ERROR: Script ran, but returned error (e.g., sheet locked)
                         handleError("Submission Failed: " + data.message);
                     }
                 })
                 .catch(error => {
-                    // C. NETWORK ERROR: Internet cut out or timeout
+                    window.removeEventListener('beforeunload', preventLeave);
                     handleError("Network Error: " + error);
                 });
-
-            }); // End of Promise.all(filePromises)
+            });
           });
       }
 

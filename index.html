@@ -158,12 +158,22 @@
             <div class="section-header">7. Additional Notes</div>
             <textarea name="notes" placeholder="Any message for the administrator? (Optional)"></textarea>
 
+            <div class="section-header">8. Declaration</div>
+            <div class="declaration-wrapper" style="display:flex; align-items:flex-start; gap:10px; margin-bottom:20px; background:#fff; padding:15px; border-radius:4px; border:1px solid #CBCBCB;">
+                <input type="checkbox" id="declaration" required style="width:20px; height:20px; margin-top:2px; cursor:pointer;">
+                <label for="declaration" style="font-size:14px; color:#4A4A4A; cursor:pointer; line-height:1.4;">
+                    I hereby declare that all the information provided above and the documents uploaded are correct and latest to the best of my knowledge. I understand that any false information may lead to cancellation of my admission.
+                </label>
+            </div>
+
             <div class="submit-wrapper">
-              <button type="submit" id="submit-btn" class="noselect">
-                <span>SUBMIT</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 11c2.761.575 6.312 1.688 9 3.438 3.157-4.23 8.828-8.187 15-11.438-5.861 5.775-10.711 12.328-14 18.917-2.651-3.766-5.547-7.271-10-10.917z"/></svg>
+              <button type="submit" id="preview-btn" class="noselect">
+                <span>PREVIEW & SUBMIT</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px; height:20px; position:static; margin-left:10px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
               </button>
             </div>
+        </form>
+
         </form>
       </div>
 
